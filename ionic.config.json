@@ -1,0 +1,7 @@
+{
+  "name": "oblits",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
