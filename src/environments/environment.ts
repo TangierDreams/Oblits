@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    RUTA_BD: "https://oblits-default-rtdb.europe-west1.firebasedatabase.app",
+    API_KEY: "AIzaSyC2HPDgRwaQxaQEPmaPTibnXUR-563a8r0",
+    USUARIO: "Onj5S52DpoexdkingmJEJqUJWJ63"
 };
 
 /*

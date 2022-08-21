@@ -1,20 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-grid>
+            <ion-row>
+                <ion-col size-sm="6" offset-sm="3">
+                    <div style="display:flex; flex-direction:row;">
+                        <ion-title>
+                            Oblits
+                        </ion-title>
+                        <ion-icon name="add-circle-outline" size="large" style="margin-right: 20px;"
+                            (click)="onEditLista(null, 0)">
+                        </ion-icon>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+                <ion-card *ngFor="let lista of misListas; let i = index">
+                    <ion-item>
+                        <ion-icon name="pin" slot="start"></ion-icon>
+                        <ion-label>{{ lista.nombre }}</ion-label>
+                    </ion-item>
+
+                    <ion-card-content>
+                        <ion-text>{{ getItems(i) }}</ion-text>
+                        <div class="ion-text-end">
+                            <ion-icon name="bag-handle-outline" size="large" color="primary"
+                                [routerLink]="['/items-edit/', i]"></ion-icon>
+                            <ion-icon name="create-outline" size="large" color="primary"
+                                (click)="onEditLista(lista, i)"></ion-icon>
+                            <ion-icon name="trash-outline" size="large" color="danger" (click)="onDeleteLista(i)">
+                            </ion-icon>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
