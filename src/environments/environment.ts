@@ -4,6 +4,17 @@
 
 export const environment = {
     production: false,
+    firebaseConfig: {
+        apiKey: "AIzaSyC2HPDgRwaQxaQEPmaPTibnXUR-563a8r0",
+        authDomain: "oblits.firebaseapp.com",
+        projectId: "oblits",
+        storageBucket: "oblits.appspot.com",
+        messagingSenderId: "682560032034",
+        appId: "1:682560032034:web:e73e30bf09523fe1a0697b",
+        measurementId: "G-QM8M2F4CJM",
+        databaseURL: "https://oblits-default-rtdb.europe-west1.firebasedatabase.app/"
+    },
+
     RUTA_BD: "https://oblits-default-rtdb.europe-west1.firebasedatabase.app",
     API_KEY: "AIzaSyC2HPDgRwaQxaQEPmaPTibnXUR-563a8r0",
     USUARIO: "Onj5S52DpoexdkingmJEJqUJWJ63"

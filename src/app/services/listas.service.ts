@@ -5,6 +5,13 @@ import { Lista } from '../models/lista';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+//Firebase:
+import {
+    AngularFireDatabase,
+    AngularFireList,
+    AngularFireObject,
+} from '@angular/fire/compat/database';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -12,6 +19,8 @@ export class ListasService {
 
     misListasSbj = new Subject<Lista[]>();
     miListaSbj = new Subject<Lista>();
+
+    afoListas: AngularFireObject<Lista[]>;
 
     private misListas: Lista[];
 
@@ -63,17 +72,33 @@ export class ListasService {
     // ]
 
     constructor(
-        private httpClient: HttpClient
+        private httpClient: HttpClient,
+        private db: AngularFireDatabase
     ) { }
 
 
     obtenerListasBD() {
-        this.httpClient.get<Lista[]>(environment.RUTA_BD + "/" + environment.USUARIO + "/listas.json")
-            .subscribe(respuesta => {
-                console.log(respuesta);
-                this.misListas = respuesta
-                this.misListasSbj.next(this.misListas);
-            })
+        this.afoListas = this.db.object("/" + environment.USUARIO + "/listas");
+        this.afoListas.snapshotChanges().subscribe(resultado => {
+            this.misListas = [];
+            let objetoLista = resultado.payload.toJSON();
+            let keyListas = Object.keys(objetoLista);
+            for (let i = 0; i < keyListas.length; i++) {
+                let lista = new Lista();
+                let keyLista = keyListas[i];
+                lista.nombre = objetoLista[keyLista].nombre;
+                lista.creada = objetoLista[keyLista].creada;
+                lista.modificada = objetoLista[keyLista].modificada;
+                lista.items = [];
+                let keyItems = Object.keys(objetoLista[keyLista].items)
+                for (let j = 0; j < keyItems.length; j++) {
+                    let keyItem = keyItems[j];
+                    lista.items.push(objetoLista[keyLista].items[keyItem])
+                }
+                this.misListas.push(lista);
+            }
+            this.misListasSbj.next(this.misListas);
+        })
     }
 
     //Devolvemos los datos de una única lista:

@@ -10,6 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { ListasEditComponent } from './listas-edit/listas-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
+// Firebase
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from 'src/environments/environment';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -23,7 +31,13 @@ import { ReactiveFormsModule } from '@angular/forms';
         ReactiveFormsModule,
         HttpClientModule,
         IonicModule.forRoot(),
-        AppRoutingModule
+        AppRoutingModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
+        AngularFireStorageModule,
+        AngularFireDatabaseModule,
+
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent],
