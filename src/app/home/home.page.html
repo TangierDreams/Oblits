@@ -7,9 +7,15 @@
                         <ion-title>
                             Oblits
                         </ion-title>
-                        <ion-icon name="add-circle-outline" size="large" style="margin-right: 20px;"
-                            (click)="onEditLista(null, 0)">
-                        </ion-icon>
+                        <ion-buttons slot="end">
+                            <ion-button (click)="onEditLista(null, 0)">
+                                <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                            </ion-button>
+                            <ion-button (click)="onLogout()">
+                                <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+                            </ion-button>
+                        </ion-buttons>
+
                     </div>
                 </ion-col>
             </ion-row>

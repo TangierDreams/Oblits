@@ -1,0 +1,63 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-grid>
+            <ion-row>
+                <ion-col size-sm="6" offset-sm="3">
+                    <div style="display:flex; flex-direction:row;">
+                        <ion-title>
+                            Oblits
+                        </ion-title>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+    <h4 class="ion-text-center">{{ isLogin ? 'LOGIN' : 'SIGNUP' }}</h4>
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit(lrFormulario)">
+        <ion-list>
+            <div *ngIf="!isLogin">
+                <ion-item>
+                    <ion-label for="nombre" position="floating">Name</ion-label>
+                    <ion-input formControlName="nombre" id="nombre" type="text"></ion-input>
+                </ion-item>
+                <ion-item lines="none" *ngIf="formulario.get('nombre').touched && formulario.get('nombre').invalid">
+                    <ion-label class="letra_avisos">The name cannot be empty</ion-label>
+                </ion-item>
+            </div>
+
+            <ion-item>
+                <ion-label for="email" position="floating">Email</ion-label>
+                <ion-input formControlName="email" id="email" type="email"></ion-input>
+            </ion-item>
+            <ion-item lines="none" *ngIf="formulario.get('email').touched && formulario.get('email').invalid">
+                <ion-label class="letra_avisos">Should be a valid email</ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-label for="password" position="floating">Password</ion-label>
+                <ion-input formControlName="password" id="password" type="password">
+                </ion-input>
+            </ion-item>
+            <ion-item lines="none" *ngIf="formulario.get('password').touched && formulario.get('password').invalid">
+                <ion-label class="letra_avisos">The password is not valid</ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <div style="text-align: right;">
+            <ion-label style="text-decoration: underline;" (click)="onOlvidado()">Forgot
+                your password?</ion-label>
+        </div>
+
+
+        <ion-button [disabled]="formulario.invalid" type="submit" color="primary" expand="block">
+            {{ isLogin ? 'Login' : 'Signup' }}</ion-button>
+
+        <ion-button type="button" color="primary" fill="outline" expand="block" (click)="cambiarModo()">Switch
+            to {{ isLogin ? 'Signup' : 'Login' }} mode</ion-button>
+    </form>
+</ion-content>

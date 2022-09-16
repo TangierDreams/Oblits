@@ -1,5 +1,6 @@
+import { AuthenticationService } from './../services/auth-firebase.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ListasEditComponent } from '../listas-edit/listas-edit.component';
 import { Lista } from '../models/lista';
@@ -16,6 +17,8 @@ export class HomePage implements OnInit, OnDestroy {
     public subscripcion: Subscription
 
     constructor(
+        private authenticationService: AuthenticationService,
+        private navController: NavController,
         private listasService: ListasService,
         private modalController: ModalController,
         private alertController: AlertController
@@ -76,6 +79,33 @@ export class HomePage implements OnInit, OnDestroy {
             .then(alertEl => {
                 alertEl.present();
             });
+    }
+
+    onLogout() {
+        this.alertController
+            .create({
+                header: "Logout",
+                message: "Are you sure you want to log out?",
+                buttons: [
+                    {
+                        text: "Cancel",
+                        role: "cancel"
+                    },
+                    {
+                        text: "Logout",
+                        handler: () => {
+                            this.authenticationService.srvSignOut();
+                            //this.router.navigate(['auth']);
+                            this.navController.navigateRoot('/auth');
+                        }
+                    }
+                ]
+            })
+            .then(alertEl => {
+                alertEl.present();
+            });
+
+
     }
 
 }
