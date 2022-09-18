@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('./items-edit/items-edit.module').then(m => m.ItemsEditPageModule),
         canLoad: [AuthGuard]
     },
+  {
+    path: 'listas-edit',
+    loadChildren: () => import('./listas-edit/listas-edit.module').then( m => m.ListasEditPageModule)
+  },
 ];
 
 @NgModule({

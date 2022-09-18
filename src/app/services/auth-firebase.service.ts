@@ -9,6 +9,7 @@ import {
     AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
+import { FirebaseApp } from '@angular/fire/app';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ import { environment } from 'src/environments/environment';
 })
 
 export class AuthenticationService {
-    activeUser: any = null;
+    activeUser: any;
     //userIsLoggedIn: boolean = false;
     //emailUser: string = "";
 
@@ -26,6 +27,7 @@ export class AuthenticationService {
         public router: Router,
         public ngZone: NgZone
     ) {
+
         // this.ngFireAuth.authState.subscribe((user) => {
         //     if (user) {
         //         //this.userIsLoggedIn = true;

@@ -78,27 +78,27 @@ export class ListasService {
 
 
     obtenerListasBD() {
-        this.afoListas = this.db.object("/" + environment.USUARIO + "/listas");
-        this.afoListas.snapshotChanges().subscribe(resultado => {
-            this.misListas = [];
-            let objetoLista = resultado.payload.toJSON();
-            let keyListas = Object.keys(objetoLista);
-            for (let i = 0; i < keyListas.length; i++) {
-                let lista = new Lista();
-                let keyLista = keyListas[i];
-                lista.nombre = objetoLista[keyLista].nombre;
-                lista.creada = objetoLista[keyLista].creada;
-                lista.modificada = objetoLista[keyLista].modificada;
-                lista.items = [];
-                let keyItems = Object.keys(objetoLista[keyLista].items)
-                for (let j = 0; j < keyItems.length; j++) {
-                    let keyItem = keyItems[j];
-                    lista.items.push(objetoLista[keyLista].items[keyItem])
-                }
-                this.misListas.push(lista);
-            }
-            this.misListasSbj.next(this.misListas);
-        })
+        // this.afoListas = this.db.object("/" + environment.USUARIO + "/listas");
+        // this.afoListas.snapshotChanges().subscribe(resultado => {
+        //     this.misListas = [];
+        //     let objetoLista = resultado.payload.toJSON();
+        //     let keyListas = Object.keys(objetoLista);
+        //     for (let i = 0; i < keyListas.length; i++) {
+        //         let lista = new Lista();
+        //         let keyLista = keyListas[i];
+        //         lista.nombre = objetoLista[keyLista].nombre;
+        //         lista.creada = objetoLista[keyLista].creada;
+        //         lista.modificada = objetoLista[keyLista].modificada;
+        //         lista.items = [];
+        //         let keyItems = Object.keys(objetoLista[keyLista].items)
+        //         for (let j = 0; j < keyItems.length; j++) {
+        //             let keyItem = keyItems[j];
+        //             lista.items.push(objetoLista[keyLista].items[keyItem])
+        //         }
+        //         this.misListas.push(lista);
+        //     }
+        //     this.misListasSbj.next(this.misListas);
+        // })
     }
 
     //Devolvemos los datos de una única lista:

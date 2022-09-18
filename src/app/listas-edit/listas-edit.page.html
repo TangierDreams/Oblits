@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-grid>
+            <ion-row>
+                <ion-col size-sm="6" offset-sm="3">
+                    <div style="display:flex; flex-direction:row;">
+                        <ion-title>
+                            Oblits
+                        </ion-title>
+                        <ion-buttons slot="end">
+                            <ion-back-button defaultHref="/home"></ion-back-button>
+                        </ion-buttons>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col size-sm="6" offset-sm="3">
+                <div>
+                    <h5 class="ion-text-center">Nueva Lista</h5>
+                </div>
+            </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+            <ion-col>
+                <div>
+                    <form [formGroup]="formulario" (ngSubmit)="onGrabarItem()">
+                        <ion-item>
+                            <ion-label for="nomLista" position="floating">Nombre</ion-label>
+                            <ion-input type="text" formControlName="nomLista" clearInput name="nomLista"></ion-input>
+                        </ion-item>
+                        <button (click)="onGrabarLista()">Grabar Lista</button>
+                    </form>
+                </div>
+            </ion-col>
+        </ion-row>
