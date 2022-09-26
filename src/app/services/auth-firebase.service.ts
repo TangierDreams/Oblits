@@ -18,38 +18,17 @@ import { FirebaseApp } from '@angular/fire/app';
 
 export class AuthenticationService {
     activeUser: any;
-    //userIsLoggedIn: boolean = false;
-    //emailUser: string = "";
 
     constructor(
         public angularFireAuth: AngularFireAuth,
         public httpClient: HttpClient,
         public router: Router,
         public ngZone: NgZone
-    ) {
+    ) { }
 
-        // this.ngFireAuth.authState.subscribe((user) => {
-        //     if (user) {
-        //         //this.userIsLoggedIn = true;
-        //         //this.emailUser = user.email;
-        //         this.userData = user;
-        //         console.log("grabo el usuario");
-        //         console.log(this.userData);
-        //         localStorage.setItem('user', JSON.stringify(this.userData));
-        //         JSON.parse(localStorage.getItem('user'));
-        //     } else {
-        //         //this.userIsLoggedIn = false;
-        //         //this.emailUser = "";
-        //         console.log("borro el usuario");
-        //         localStorage.setItem('user', null);
-        //         JSON.parse(localStorage.getItem('user'));
-        //     }
-        //});
-    }
+    // Login con email/password
 
-    // Login with email/password
-
-    srvLogIn(email: string, password: string) {
+    logIn(email: string, password: string) {
         return new Promise<any>((resolve, reject) => {
             this.angularFireAuth.signInWithEmailAndPassword(email, password)
                 .then(
@@ -57,7 +36,6 @@ export class AuthenticationService {
                         console.log(res.user);
                         this.activeUser = res.user;
                         localStorage.setItem('user', JSON.stringify(res.user));
-                        //JSON.parse(localStorage.getItem('user'));
                         resolve(res);
                     },
                     err => {
@@ -73,15 +51,7 @@ export class AuthenticationService {
     }
 
 
-    // this.auth.auth.createUserWithEmailAndPassword(email, password)
-    // .then((user: auth.UserCredential) => {
-    //   user.user.updateProfile({
-    //     displayName: username
-    //   });
-    // })
-
-
-    srvCreateUser(pEmail: string, pPassword: string, pNombre: string) {
+    createUser(pEmail: string, pPassword: string, pNombre: string) {
         return new Promise<any>((resolve, reject) => {
             this.angularFireAuth.createUserWithEmailAndPassword(pEmail, pPassword)
                 .then(
@@ -115,30 +85,7 @@ export class AuthenticationService {
     }
 
 
-    // Email verification when new user register
-
-    // SendVerificationMail() {
-    //     return this.ngFireAuth.currentUser.then((user) => {
-    //         return user.sendEmailVerification().then(() => {
-    //             this.router.navigate(['login']);
-    //         });
-    //     });
-    // }
-
     // Recover password
-
-    // srvPasswordRecover(pEmail: string) {
-    //     return this.ngFireAuth
-    //         .sendPasswordResetEmail(pEmail)
-    //         .then(() => {
-    //             window.alert(
-    //                 'Password reset email has been sent, please check your inbox.'
-    //             );
-    //         })
-    //         .catch((error) => {
-    //             window.alert(error);
-    //         });
-    // }
 
     srvPasswordRecover(pEmail: string) {
         return new Promise<any>((resolve, reject) => {
@@ -163,18 +110,12 @@ export class AuthenticationService {
     get isLoggedIn(): boolean {
         if (!this.activeUser) {
             this.activeUser = JSON.parse(localStorage.getItem('user'));
+            console.log("ActiveUser:");
+            console.log(this.activeUser);
         }
         return !!this.activeUser;
     }
 
-    // // Returns true when user's email is verified
-
-    // get isEmailVerified(): boolean {
-    //     const user = JSON.parse(localStorage.getItem('user'));
-    //     //No vamos a verificar por email:
-    //     //**return user.emailVerified !== false ? true : false;
-    //     return true;
-    // }
 
     // Sign in with Gmail
 
@@ -190,44 +131,17 @@ export class AuthenticationService {
             .then((result) => {
                 this.activeUser = result.user;
                 localStorage.setItem('user', JSON.stringify(result.user));
-
-                //this.userIsLoggedIn = true;
-                //this.emailUser = result.user.email;
-                // this.ngZone.run(() => {
-                //     this.router.navigate(['home']);
-                // });
-                // this.SetUserData(result.user);
             })
             .catch((error) => {
                 this.activeUser = null;
                 localStorage.removeItem('user');
-                // this.userIsLoggedIn = false;
-                // this.emailUser = "";
-                // window.alert(error);
             });
     }
 
-    // // Store user in localStorage
 
-    // private SetUserData(user) {
-    //     const userRef: AngularFirestoreDocument<any> = this.afStore.doc(
-    //         `users/${user.uid}`
-    //     );
-    //     const userData: User = {
-    //         uid: user.uid,
-    //         email: user.email,
-    //         displayName: user.displayName,
-    //         photoURL: user.photoURL,
-    //         emailVerified: user.emailVerified,
-    //     };
-    //     return userRef.set(userData, {
-    //         merge: true,
-    //     });
-    // }
+    // Nos vamos...
 
-    // Sign-out
-
-    srvSignOut() {
+    signOut() {
         return this.angularFireAuth.signOut().then(() => {
             //this.userIsLoggedIn = false;
             //this.emailUser = "";
@@ -237,15 +151,26 @@ export class AuthenticationService {
     }
 
 
-    //Grabamos las listas en la BD Realtime bajo el usuario correspondiente:
+    // Email verification when new user register
 
-    grabarUsuarioBD(pUsuario: Usuario) {
-        this.httpClient.put(
-            environment.RUTA_BD + "/usuarios/" + pUsuario.id + ".json",
-            pUsuario
-        ).subscribe(respuesta => {
-            console.log(respuesta);
-        })
-    }
+    // SendVerificationMail() {
+    //     return this.ngFireAuth.currentUser.then((user) => {
+    //         return user.sendEmailVerification().then(() => {
+    //             this.router.navigate(['login']);
+    //         });
+    //     });
+    // }
+
+
+    // // Returns true when user's email is verified
+
+    // get isEmailVerified(): boolean {
+    //     const user = JSON.parse(localStorage.getItem('user'));
+    //     //No vamos a verificar por email:
+    //     //**return user.emailVerified !== false ? true : false;
+    //     return true;
+    // }
+
+
 
 }

@@ -38,7 +38,7 @@ export class ItemsEditPage implements OnInit, OnDestroy {
         this.subscripcion = this.listasService.miListaSbj.subscribe(lista => {
             this.miLista = lista;
         })
-        this.miLista = this.listasService.obtenerLista(this.idLista);
+        //this.miLista = this.listasService.obtenerLista(this.idLista);
 
         this.formulario = new FormGroup({
             "nomItem": new FormControl(null, [Validators.required, Validators.maxLength(50)])
@@ -78,7 +78,7 @@ export class ItemsEditPage implements OnInit, OnDestroy {
         let nuevoItem = new Item();
 
         if (this.indexItem !== -1) {
-            nuevoItem = this.miLista.items[this.indexItem];
+            nuevoItem = null; //this.miLista.items[this.indexItem];
             console.log(this.indexItem);
             console.log(nuevoItem);
             nuevoItem.nombre = this.formulario.get("nomItem").value;
@@ -86,7 +86,6 @@ export class ItemsEditPage implements OnInit, OnDestroy {
             this.listasService.updateItem(this.idLista, nuevoItem, this.indexItem);
         } else {
             nuevoItem.nombre = this.formulario.get("nomItem").value;
-            nuevoItem.cantidad = 0;
             nuevoItem.comprado = false;
             nuevoItem.creado = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
             nuevoItem.modificado = nuevoItem.creado;
@@ -111,7 +110,7 @@ export class ItemsEditPage implements OnInit, OnDestroy {
         console.log("onEliminarItem()");
         this.alertController
             .create({
-                header: this.miLista.items[pIndexItem].nombre,
+                header: "pepe", //this.miLista.items[pIndexItem].nombre,
                 message: "Do you really want to delete this item?",
                 buttons: [
                     {

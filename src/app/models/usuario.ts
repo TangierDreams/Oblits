@@ -1,5 +1,7 @@
 export class Usuario {
-    id: string;
     nombre: string;
+    uid: string;
     email: string;
+    creado: string;
+    listas?: string[] | null;
 }

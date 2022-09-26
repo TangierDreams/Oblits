@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ListasEditComponent } from './listas-edit/listas-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // Firebase
@@ -21,10 +20,8 @@ import { environment } from 'src/environments/environment';
 @NgModule({
     declarations: [
         AppComponent,
-        ListasEditComponent
     ],
     entryComponents: [
-        ListasEditComponent
     ],
     imports: [
         BrowserModule,

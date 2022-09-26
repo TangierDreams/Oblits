@@ -1,8 +1,9 @@
+import { UsuariosService } from './../services/usuarios.service';
+import { Router } from '@angular/router';
 import { AuthenticationService } from './../services/auth-firebase.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { ListasEditComponent } from '../listas-edit/listas-edit.component';
 import { Lista } from '../models/lista';
 import { ListasService } from '../services/listas.service';
 
@@ -15,20 +16,26 @@ export class HomePage implements OnInit, OnDestroy {
 
     public misListas: Lista[];
     public subscripcion: Subscription
+    public nomUsuario: string
 
     constructor(
         private authenticationService: AuthenticationService,
         private navController: NavController,
         private listasService: ListasService,
         private modalController: ModalController,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private router: Router,
+        private usuariosService: UsuariosService,
     ) { }
 
     ngOnInit(): void {
+        this.nomUsuario = this.authenticationService.activeUser.displayName;
         this.subscripcion = this.listasService.misListasSbj.subscribe(valor => {
             this.misListas = valor;
         })
         this.listasService.obtenerListasBD();
+
+
     }
 
     ngOnDestroy(): void {
@@ -41,20 +48,21 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    onEditLista(pLista: Lista, pIndexLista: number) {
-        let copiaLista: Lista = null;
-        if (pLista) {
-            copiaLista = Object.assign({}, pLista);
-        }
-        this.modalController.create({
-            component: ListasEditComponent,
-            breakpoints: [0.25, 0.50],
-            initialBreakpoint: 0.25,
-            componentProps: { selectedLista: copiaLista, indexLista: pIndexLista }
-        })
-            .then(elemento => {
-                elemento.present();
-            });
+    onEditLista(pIdLista: string | null) {
+        this.router.navigate(["listas-edit", pIdLista])
+        //let copiaLista: Lista = null;
+        // if (pLista) {
+        //     copiaLista = Object.assign({}, pLista);
+        // }
+        // this.modalController.create({
+        //     component: ListasEditComponent,
+        //     breakpoints: [0.25, 0.50],
+        //     initialBreakpoint: 0.25,
+        //     componentProps: { selectedLista: copiaLista, indexLista: pIndexLista }
+        // })
+        //     .then(elemento => {
+        //         elemento.present();
+        //     });
 
     }
 
@@ -94,7 +102,7 @@ export class HomePage implements OnInit, OnDestroy {
                     {
                         text: "Logout",
                         handler: () => {
-                            this.authenticationService.srvSignOut();
+                            this.authenticationService.signOut();
                             //this.router.navigate(['auth']);
                             this.navController.navigateRoot('/auth');
                         }

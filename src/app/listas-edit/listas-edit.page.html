@@ -31,13 +31,26 @@
         <ion-row>
             <ion-col>
                 <div>
-                    <form [formGroup]="formulario" (ngSubmit)="onGrabarItem()">
+                    <form [formGroup]="formulario" (ngSubmit)="onGrabarLista()">
                         <ion-item>
                             <ion-label for="nomLista" position="floating">Nombre</ion-label>
                             <ion-input type="text" formControlName="nomLista" clearInput name="nomLista"></ion-input>
                         </ion-item>
-                        <button (click)="onGrabarLista()">Grabar Lista</button>
+                        <ion-item>
+                            <ion-label for="usuario" position="floating">Compartida con...</ion-label>
+                            <ion-input type="text" formControlName="usuario" clearInput name="usuario"></ion-input>
+                            <ion-icon name="add-circle-outline" slot="end" (click)="onAddUser()"></ion-icon>
+                        </ion-item>
+                        <ion-list>
+                            <ion-item *ngFor="let compartida_con of listaCompartida">
+                                <ion-label>{{ compartida_con }}</ion-label>
+                            </ion-item>
+                        </ion-list>
+                        <ion-button type="submit">Grabar Lista</ion-button>
                     </form>
                 </div>
             </ion-col>
         </ion-row>
+
+    </ion-grid>
+</ion-content>

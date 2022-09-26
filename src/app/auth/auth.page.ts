@@ -1,3 +1,5 @@
+import { GenericService } from './../services/generic.service';
+import { UsuariosService } from './../services/usuarios.service';
 import { AuthenticationService } from './../services/auth-firebase.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,9 +21,11 @@ export class AuthPage implements OnInit {
 
     constructor(
         private authService: AuthenticationService,
+        private usuariosService: UsuariosService,
         private router: Router,
         private loadingController: LoadingController,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private genericService: GenericService,
     ) { }
 
     ngOnInit() {
@@ -83,7 +87,7 @@ export class AuthPage implements OnInit {
             .then(objLoading => {
                 objLoading.present();
                 if (this.isLogin) {
-                    this.authService.srvLogIn(email, password)
+                    this.authService.logIn(email, password)
                         .then((response) => {
                             objLoading.dismiss();
                             this.formulario.reset();
@@ -93,13 +97,13 @@ export class AuthPage implements OnInit {
                             this.mostrarMensaje("No se ha podido realizar login del usuario. " + error.message);
                         })
                 } else {
-                    this.authService.srvCreateUser(email, password, nombre)
+                    this.authService.createUser(email, password, nombre)
                         .then((response) => {
                             const nuevoUsuario = new Usuario();
-                            nuevoUsuario.id = response.user.uid;
+                            nuevoUsuario.uid = response.user.uid;
                             nuevoUsuario.nombre = response.user.displayName;
                             nuevoUsuario.email = response.user.email;
-                            this.authService.grabarUsuarioBD(nuevoUsuario);
+                            this.usuariosService.grabarUsuario(nuevoUsuario);
                             objLoading.dismiss();
                             this.formulario.reset();
                             this.router.navigate(['home']);

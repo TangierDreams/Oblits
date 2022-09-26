@@ -1,6 +1,6 @@
 export class Item {
+    id?: string | null;
     nombre: string;
-    cantidad: number;
     comprado: boolean;
     creado: string;
     modificado: string;
