@@ -65,43 +65,27 @@ export class ListasEditPage implements OnInit {
         nuevaLista.propietario = this.authenticationService.activeUser.email;
         nuevaLista.creada = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
         nuevaLista.modificada = nuevaLista.creada;
+        this.listaCompartida.unshift(this.authenticationService.activeUser.email);
+        nuevaLista.compartida_con = this.listaCompartida;
 
         this.listasService.crearLista(nuevaLista)
             .then((lista) => {
 
-                //Añadimos la lista al propietario:
+                //Añadimos la lista a los usuarios con las que se comparte:
 
-                this.subscripUsuario = this.usuariosService.obtenerUsuario(this.authenticationService.activeUser.email).subscribe(usuario => {
-                    this.subscripUsuario.unsubscribe();
-                    let listasUsuario: string[] = [];
-                    if (usuario.listas) {
-                        listasUsuario = usuario.listas;
-                    }
-                    listasUsuario.push(lista.key);
-                    this.usuariosService.grabarListasUsuario(this.authenticationService.activeUser.email, listasUsuario)
-                        .then(() => {
-                            console.log("Hemos añadido la nueva lista al propietario...");
-
-                            //Añadimos la lista a los usuarios con las que se comparte:
-
-                            this.listaCompartida.forEach(emailCompartidaCon => {
-                                this.subscripUsuario = this.usuariosService.obtenerUsuario(emailCompartidaCon).subscribe(usuarioCompartido => {
-                                    this.subscripUsuario.unsubscribe();
-                                    let listasUsuario: string[] = [];
-                                    if (usuarioCompartido.listas) {
-                                        listasUsuario = usuarioCompartido.listas;
-                                    }
-                                    listasUsuario.push(lista.key);
-                                    this.usuariosService.grabarListasUsuario(emailCompartidaCon, listasUsuario)
-                                        .then(() => {
-                                            console.log("Añadida nueva lista al usuario " + usuarioCompartido.nombre + "...");
-                                        });
-                                })
-                            })
-
-                        });
+                this.listaCompartida.forEach(emailCompartidaCon => {
+                    this.usuariosService.obtenerUsuario(emailCompartidaCon).subscribe(usuarioCompartido => {
+                        let listasUsuario: string[] = [];
+                        if (usuarioCompartido.listas) {
+                            listasUsuario = usuarioCompartido.listas;
+                        }
+                        listasUsuario.push(lista.key);
+                        this.usuariosService.grabarListasUsuario(emailCompartidaCon, listasUsuario)
+                            .then(() => {
+                                console.log("Añadida nueva lista al usuario " + usuarioCompartido.nombre + "...");
+                            });
+                    })
                 })
-
             });
 
         this.formulario.reset();

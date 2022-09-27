@@ -2,6 +2,7 @@ import { GenericService } from './generic.service';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
 import { Usuario } from '../models/usuario';
+import { take } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,7 @@ export class UsuariosService {
     }
 
     obtenerUsuario(pUsuarioEmail: string) {
-        return this.db.object<Usuario>("/usuarios/" + this.genericService.email2Key(pUsuarioEmail)).valueChanges();
+        return this.db.object<Usuario>("/usuarios/" + this.genericService.email2Key(pUsuarioEmail)).valueChanges().pipe(take(1));
     }
 
     //Creamos un nuevo usuario:

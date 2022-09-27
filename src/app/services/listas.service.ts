@@ -55,6 +55,15 @@ export class ListasService {
         return this.aflListas.push(pLista);
     }
 
+
+    //Modificamos el array de usuarios de una lista:
+
+    grabarUsuariosLista(pListaId: string, pCompartidaCon: string[]) {
+        let afoLista: AngularFireObject<Lista>;
+        afoLista = this.db.object("/listas/" + pListaId);
+        return afoLista.update({ compartida_con: pCompartidaCon });
+    }
+
     //Actualizamos los datos de una lista:
 
     actualizarLista(pLista: Lista, pIndexLista: number) {
