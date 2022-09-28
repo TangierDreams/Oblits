@@ -1,9 +1,12 @@
+import { Usuario } from './../models/usuario';
+import { UsuariosService } from './usuarios.service';
 import { Item } from './../models/item';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Lista } from '../models/lista';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs/operators';
 
 //Firebase:
 import {
@@ -17,30 +20,45 @@ import {
 })
 export class ListasService {
 
-    misListasSbj = new Subject<Lista[]>();
-    miListaSbj = new Subject<Lista>();
+    public misListasSbj = new Subject<Lista[]>();
+    //miListaSbj = new Subject<Lista>();
 
     afoListas: AngularFireObject<Lista[]>;
     aflListas: AngularFireList<Lista>;
 
-    misListas: Observable<any[]>;
+    //misListas: Observable<any[]>;
+
+    private misListas: Lista[];
 
 
     constructor(
         private httpClient: HttpClient,
+        private usuariosService: UsuariosService,
         private db: AngularFireDatabase
     ) {
         this.aflListas = db.list("/listas");
     }
 
 
-    obtenerListasBD() {
+    obtenerListasUsuario(pUsuarioEmail: string) {
+        this.misListas = [];
+        this.usuariosService.obtenerUsuario(pUsuarioEmail).subscribe(resultado => {
+            resultado.listas.forEach(pIdLista => {
+                this.obtenerUnaLista(pIdLista).subscribe(pLista => {
+                    this.misListas.push(pLista);
+                })
+            })
+            this.misListasSbj.next(this.misListas);
+        })
 
     }
 
+
+
     //Devolvemos los datos de una única lista:
 
-    obtenerLista(pIndexLista: number) {
+    obtenerUnaLista(pListaId: string) {
+        return this.db.object<Lista>("/listas/" + pListaId).valueChanges().pipe(take(1));
     }
 
     //Obtenemos un string con los items de una lista separados por ",":

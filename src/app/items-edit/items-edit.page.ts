@@ -35,9 +35,9 @@ export class ItemsEditPage implements OnInit, OnDestroy {
         this.indexItem = -1;
         this.idLista = +this.activatedRoute.snapshot.paramMap.get('idLista');
 
-        this.subscripcion = this.listasService.miListaSbj.subscribe(lista => {
-            this.miLista = lista;
-        })
+        // this.subscripcion = this.listasService.miListaSbj.subscribe(lista => {
+        //     this.miLista = lista;
+        // })
         //this.miLista = this.listasService.obtenerLista(this.idLista);
 
         this.formulario = new FormGroup({
