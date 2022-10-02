@@ -21,12 +21,12 @@ const routes: Routes = [
     },
 
     {
-        path: 'items-edit/:idLista',
+        path: 'items-edit/:listaId',
         loadChildren: () => import('./items-edit/items-edit.module').then(m => m.ItemsEditPageModule),
         canLoad: [AuthGuard]
     },
     {
-        path: 'listas-edit/:idLista',
+        path: 'listas-edit/:listaId',
         loadChildren: () => import('./listas-edit/listas-edit.module').then(m => m.ListasEditPageModule)
     },
 ];

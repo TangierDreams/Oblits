@@ -30,7 +30,9 @@ export class HomePage implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.nomUsuario = this.authenticationService.activeUser.displayName;
+    }
 
+    ionViewWillEnter() {
         this.subscripListas = this.listasService.misListasSbj.subscribe(pListas => {
             console.log("obtenemos las listas...");
             this.misListas = pListas;
@@ -41,12 +43,14 @@ export class HomePage implements OnInit, OnDestroy {
             this.listasService.obtenerListasUsuario(this.authenticationService.activeUser.email)
         })
 
+    }
 
+    ionViewWillLeave() {
+        this.subscripUsuario.unsubscribe();
+        this.subscripListas.unsubscribe();
     }
 
     ngOnDestroy(): void {
-        this.subscripUsuario.unsubscribe();
-        this.subscripListas.unsubscribe();
     }
 
 

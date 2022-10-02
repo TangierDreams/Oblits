@@ -24,7 +24,7 @@ export class ListasService {
     //miListaSbj = new Subject<Lista>();
 
     afoListas: AngularFireObject<Lista[]>;
-    aflListas: AngularFireList<Lista>;
+    //aflListas: AngularFireList<Lista>;
 
     //misListas: Observable<any[]>;
 
@@ -36,9 +36,11 @@ export class ListasService {
         private usuariosService: UsuariosService,
         private db: AngularFireDatabase
     ) {
-        this.aflListas = db.list("/listas");
+        //this.aflListas = db.list("/listas");
     }
 
+
+    //Obtenemos un array con todas las listas de un usuario:
 
     obtenerListasUsuario(pUsuarioEmail: string) {
         this.misListas = [];
@@ -71,9 +73,19 @@ export class ListasService {
 
     //Creamos una nueva lista:
 
-    crearLista(pLista: Lista) {
+    crearLista(pLista: Lista, pListaId: string) {
         pLista.id = null;
-        return this.aflListas.push(pLista);
+        if (pListaId) {
+            let afoLista: AngularFireObject<Lista>;
+            afoLista = this.db.object("/listas/" + pListaId);
+            console.log("hacemos un set de /listas/" + pListaId);
+            return afoLista.set(pLista);
+        } else {
+            let aflListas: AngularFireList<Lista>;
+            aflListas = this.db.list("/listas");
+            console.log("Hacemos un push de la nueva lista");
+            return aflListas.push(pLista);            
+        }
     }
 
 
@@ -94,9 +106,7 @@ export class ListasService {
     //Eliminar una lista y todos sus items:
 
     eliminarLista(pListaId: string) {
-        console.log(pListaId);
         return this.obtenerUnaLista(pListaId).subscribe(pLista => {
-            console.log(pLista);
             pLista.compartida_con.forEach(pUsuarioEmail => {
                 this.usuariosService.obtenerUnUsuario(pUsuarioEmail).subscribe(pUsuario => {
                     const auxListas = pUsuario.listas.filter((item) => item !== pListaId);
@@ -107,6 +117,7 @@ export class ListasService {
                 })
             })
             this.db.object<Lista>("/listas/" + pListaId).remove();
+            console.log("Eliminada la lista " + pListaId);
         })
     }
 
