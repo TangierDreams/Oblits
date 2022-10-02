@@ -2,7 +2,7 @@ import { Usuario } from './../models/usuario';
 import { UsuariosService } from './usuarios.service';
 import { Item } from './../models/item';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { observable, Observable, Subject } from 'rxjs';
 import { Lista } from '../models/lista';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -23,12 +23,14 @@ export class ListasService {
     public misListasSbj = new Subject<Lista[]>();
     //miListaSbj = new Subject<Lista>();
 
-    afoListas: AngularFireObject<Lista[]>;
+    //afoListas: AngularFireObject<Lista[]>;
     //aflListas: AngularFireList<Lista>;
 
     //misListas: Observable<any[]>;
 
     private misListas: Lista[];
+
+    public listaActualId: string;
 
 
     constructor(
@@ -105,21 +107,22 @@ export class ListasService {
 
     //Eliminar una lista y todos sus items:
 
-    eliminarLista(pListaId: string) {
-        return this.obtenerUnaLista(pListaId).subscribe(pLista => {
+    oEliminarLista = new Observable<Boolean>(resultado => {
+        this.obtenerUnaLista(this.listaActualId).subscribe(pLista => {
             pLista.compartida_con.forEach(pUsuarioEmail => {
                 this.usuariosService.obtenerUnUsuario(pUsuarioEmail).subscribe(pUsuario => {
-                    const auxListas = pUsuario.listas.filter((item) => item !== pListaId);
+                    const auxListas = pUsuario.listas.filter((item) => item !== this.listaActualId);
                     this.usuariosService.grabarListasUsuario(pUsuarioEmail, auxListas)
                         .then(() => {
-                            console.log("Eliminada la lista " + pListaId + " del usuario " + pUsuarioEmail);
+                            console.log("Eliminada la lista " + this.listaActualId + " del usuario " + pUsuarioEmail);
                         });
                 })
             })
-            this.db.object<Lista>("/listas/" + pListaId).remove();
-            console.log("Eliminada la lista " + pListaId);
-        })
-    }
+            this.db.object<Lista>("/listas/" + this.listaActualId).remove();
+            resultado.next(true);
+        })        
+
+    }).pipe(take(1));
 
     //Añadimos un item a una lista:
 

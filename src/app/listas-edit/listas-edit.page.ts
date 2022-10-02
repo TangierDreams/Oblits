@@ -92,8 +92,8 @@ export class ListasEditPage implements OnInit {
             //Si es una modificación, eliminamos la lista y la volvemos a crear con el mismo código:
 
             console.log("lista a modificar: " + this.listaId);
-            this.listasService.eliminarLista(this.listaId)
-            .then(() => {
+            this.listasService.listaActualId = this.listaId;
+            this.listasService.oEliminarLista.subscribe(() => {
                 this.listasService.crearLista(nuevaLista, this.listaId)
                 .then(() => {
     
@@ -113,8 +113,9 @@ export class ListasEditPage implements OnInit {
                         })
                     })
                 });
+            })
+            
     
-            });
         } else {
 
             console.log("Se crea una nueva lista...");

@@ -76,7 +76,10 @@ export class HomePage implements OnInit, OnDestroy {
                     {
                         text: "Delete",
                         handler: () => {
-                            this.listasService.eliminarLista(pListaId);
+                            this.listasService.listaActualId = pListaId;
+                            this.listasService.oEliminarLista.subscribe(() => {
+                                console.log("Lista " + pListaNombre + " eliminada");
+                            });
                         }
                     }
                 ]
