@@ -42,15 +42,17 @@ export class ListasService {
 
     obtenerListasUsuario(pUsuarioEmail: string) {
         this.misListas = [];
-        this.usuariosService.obtenerUsuario(pUsuarioEmail).subscribe(resultado => {
-            resultado.listas.forEach(pIdLista => {
-                this.obtenerUnaLista(pIdLista).subscribe(pLista => {
-                    this.misListas.push(pLista);
+        this.usuariosService.obtenerUnUsuario(pUsuarioEmail).subscribe(resultado => {
+            if (resultado.listas) {
+                resultado.listas.forEach(pListaId => {
+                    this.obtenerUnaLista(pListaId).subscribe(pLista => {
+                        pLista.id = pListaId;
+                        this.misListas.push(pLista);
+                    })
                 })
-            })
+            }
             this.misListasSbj.next(this.misListas);
         })
-
     }
 
 
@@ -70,6 +72,7 @@ export class ListasService {
     //Creamos una nueva lista:
 
     crearLista(pLista: Lista) {
+        pLista.id = null;
         return this.aflListas.push(pLista);
     }
 
@@ -90,7 +93,21 @@ export class ListasService {
 
     //Eliminar una lista y todos sus items:
 
-    eliminarLista(pIndexLista: number) {
+    eliminarLista(pListaId: string) {
+        console.log(pListaId);
+        return this.obtenerUnaLista(pListaId).subscribe(pLista => {
+            console.log(pLista);
+            pLista.compartida_con.forEach(pUsuarioEmail => {
+                this.usuariosService.obtenerUnUsuario(pUsuarioEmail).subscribe(pUsuario => {
+                    const auxListas = pUsuario.listas.filter((item) => item !== pListaId);
+                    this.usuariosService.grabarListasUsuario(pUsuarioEmail, auxListas)
+                        .then(() => {
+                            console.log("Eliminada la lista " + pListaId + " del usuario " + pUsuarioEmail);
+                        });
+                })
+            })
+            this.db.object<Lista>("/listas/" + pListaId).remove();
+        })
     }
 
     //Añadimos un item a una lista:

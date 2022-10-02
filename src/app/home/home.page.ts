@@ -1,3 +1,4 @@
+import { UsuariosService } from './../services/usuarios.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './../services/auth-firebase.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -14,8 +15,9 @@ import { ListasService } from '../services/listas.service';
 export class HomePage implements OnInit, OnDestroy {
 
     public misListas: Lista[];
-    public subscripcion: Subscription
-    public nomUsuario: string
+    public subscripUsuario: Subscription;
+    public subscripListas: Subscription;
+    public nomUsuario: string;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -23,18 +25,28 @@ export class HomePage implements OnInit, OnDestroy {
         private listasService: ListasService,
         private alertController: AlertController,
         private router: Router,
+        private usuariosService: UsuariosService
     ) { }
 
     ngOnInit(): void {
         this.nomUsuario = this.authenticationService.activeUser.displayName;
-        this.subscripcion = this.listasService.misListasSbj.subscribe(pListas => {
+
+        this.subscripListas = this.listasService.misListasSbj.subscribe(pListas => {
+            console.log("obtenemos las listas...");
             this.misListas = pListas;
         })
-        this.listasService.obtenerListasUsuario(this.authenticationService.activeUser.email);
+
+        this.subscripUsuario = this.usuariosService.observarUsuarioActivo().subscribe(pUsuario => {
+            console.log("obtenerListasUsuario...");
+            this.listasService.obtenerListasUsuario(this.authenticationService.activeUser.email)
+        })
+
+
     }
 
     ngOnDestroy(): void {
-        this.subscripcion.unsubscribe();
+        this.subscripUsuario.unsubscribe();
+        this.subscripListas.unsubscribe();
     }
 
 
@@ -43,14 +55,14 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    onEditLista(pIdLista: string | null) {
-        this.router.navigate(["listas-edit", pIdLista]);
+    onEditLista(pListaId: string | null) {
+        this.router.navigate(["listas-edit", pListaId]);
     }
 
-    onDeleteLista(pIndex: number) {
+    onDeleteLista(pListaId: string, pListaNombre: string) {
         this.alertController
             .create({
-                header: this.misListas[pIndex].nombre,
+                header: pListaNombre,
                 message: "Do you really want to delete this list?",
                 buttons: [
                     {
@@ -60,7 +72,7 @@ export class HomePage implements OnInit, OnDestroy {
                     {
                         text: "Delete",
                         handler: () => {
-                            this.listasService.eliminarLista(pIndex);
+                            this.listasService.eliminarLista(pListaId);
                         }
                     }
                 ]

@@ -74,7 +74,7 @@ export class ListasEditPage implements OnInit {
                 //Añadimos la lista a los usuarios con las que se comparte:
 
                 this.listaCompartida.forEach(emailCompartidaCon => {
-                    this.usuariosService.obtenerUsuario(emailCompartidaCon).subscribe(usuarioCompartido => {
+                    this.usuariosService.obtenerUnUsuario(emailCompartidaCon).subscribe(usuarioCompartido => {
                         let listasUsuario: string[] = [];
                         if (usuarioCompartido.listas) {
                             listasUsuario = usuarioCompartido.listas;

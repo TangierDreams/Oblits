@@ -40,10 +40,15 @@
                         <ion-text>{{ getItems(i) }}</ion-text>
                         <div class="ion-text-end">
                             <ion-icon name="bag-handle-outline" size="large" color="primary"
-                                [routerLink]="['/items-edit/', i]"></ion-icon>
+                                [routerLink]="['/items-edit/', lista.id]">
+                            </ion-icon>
+
                             <ion-icon name="create-outline" size="large" color="primary"
-                                (click)="onEditLista(lista, i)"></ion-icon>
-                            <ion-icon name="trash-outline" size="large" color="danger" (click)="onDeleteLista(i)">
+                                [routerLink]="['/listas-edit/', lista.id]">
+                            </ion-icon>
+
+                            <ion-icon name="trash-outline" size="large" color="danger"
+                                (click)="onDeleteLista(lista.id, lista.nombre)">
                             </ion-icon>
                         </div>
                     </ion-card-content>

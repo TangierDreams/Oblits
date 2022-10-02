@@ -1,3 +1,4 @@
+import { AuthenticationService } from './auth-firebase.service';
 import { GenericService } from './generic.service';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
@@ -11,11 +12,16 @@ export class UsuariosService {
 
     constructor(
         private db: AngularFireDatabase,
-        private genericService: GenericService
+        private genericService: GenericService,
+        private authenticationService: AuthenticationService
     ) {
     }
 
-    obtenerUsuario(pUsuarioEmail: string) {
+    observarUsuarioActivo() {
+        return this.db.object<Usuario>("/usuarios/" + this.genericService.email2Key(this.authenticationService.activeUser.email)).valueChanges();
+    }
+
+    obtenerUnUsuario(pUsuarioEmail: string) {
         return this.db.object<Usuario>("/usuarios/" + this.genericService.email2Key(pUsuarioEmail)).valueChanges().pipe(take(1));
     }
 
